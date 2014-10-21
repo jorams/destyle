@@ -8,7 +8,7 @@ Currently (mostly) implemented is the tokenization step.
 
 ## Goals
 
-A long-term goal is to implement [Less][less] implementation in Common Lisp.
+A long-term goal is to implement a [Less][less] implementation in Common Lisp.
 
 [less]: http://lesscss.org/
 
