@@ -41,7 +41,8 @@
 
 (deftoken
   (<string-token>
-   <url-token>)
+   <url-token>
+   <whitespace-token>)
   (value string))
 
 (deftoken
@@ -77,7 +78,6 @@
    <suffix-match-token>
    <substring-match-token>
    <column-token>
-   <whitespace-token>
    <cdo-token>
    <cdc-token>
    <colon-token>

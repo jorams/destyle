@@ -43,8 +43,8 @@
           collect (trigger char))))
 
 (define-token-trigger #'whitespace-p
-  (consume-while #'whitespace-p)
-  (make-instance '<whitespace-token>))
+  (make-instance '<whitespace-token>
+                 :value (consume-while #'whitespace-p)))
 
 (define-token-trigger #\"
   (consume)
