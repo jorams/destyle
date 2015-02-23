@@ -338,5 +338,40 @@
                        :hash-type type
                        :value (consume-name)))))
 
-;; TODO: Implement CONSUME-UNICODE-RANGE
-(defun consume-unicode-range ())
+;;; Unicode ranges
+
+(defun valid-unicode-range-character-p (char)
+  (or (digit-char-p char 16)
+      (char= char #\?)))
+
+(defun consume-unicode-range-element (can-contain-?-p)
+  (flet ((hex-char-p (char) (digit-char-p char 16)))
+    (if (not can-contain-?-p)
+        (parse-integer (consume-while #'hex-char-p) :radix 16)
+        (let* ((token-start (consume-while #'hex-char-p))
+               (token-end (consume-while
+                         (let ((amount (- 6 (length token-start))))
+                           (lambda (char)
+                             (and (char= #\? char)
+                                  (plusp amount)
+                                  (decf amount))))))
+               (token (concatenate 'string token-start token-end)))
+          (values
+           (parse-integer (substitute #\0 #\? token) :radix 16)
+           (and (/= 0 (length token-end))
+                (parse-integer (substitute #\F #\? token) :radix 16)))))))
+
+(defun consume-unicode-range ()
+  (and (or (char= #\u (peek 1))
+           (char= #\U (peek 1)))
+       (char= #\+ (peek 2))
+       (valid-unicode-range-character-p (peek 3))
+       (consume 2)
+       (multiple-value-bind (start end)
+           (consume-unicode-range-element t)
+         (make-instance '<unicode-range-token>
+                        :start start
+                        :end (or end
+                                 (and (char= #\- (peek 1))
+                                      (consume)
+                                      (consume-unicode-range-element nil)))))))
