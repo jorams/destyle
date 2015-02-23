@@ -345,16 +345,17 @@
       (char= char #\?)))
 
 (defun consume-unicode-range-element (can-contain-?-p)
-  (flet ((hex-char-p (char) (digit-char-p char 16)))
+  (flet ((make-hex-consumer (amount &optional to-consume)
+           (lambda (char) (and (or (and to-consume (char= char to-consume))
+                                   (digit-char-p char 16))
+                               (plusp amount)
+                               (decf amount)))))
     (if (not can-contain-?-p)
-        (parse-integer (consume-while #'hex-char-p) :radix 16)
-        (let* ((token-start (consume-while #'hex-char-p))
+        (parse-integer (consume-while (make-hex-consumer 6)) :radix 16)
+        (let* ((token-start (consume-while (make-hex-consumer 6)))
                (token-end (consume-while
-                         (let ((amount (- 6 (length token-start))))
-                           (lambda (char)
-                             (and (char= #\? char)
-                                  (plusp amount)
-                                  (decf amount))))))
+                           (make-hex-consumer (- 6 (length token-start))
+                                              #\?)))
                (token (concatenate 'string token-start token-end)))
           (values
            (parse-integer (substitute #\0 #\? token) :radix 16)
@@ -372,6 +373,8 @@
          (make-instance '<unicode-range-token>
                         :start start
                         :end (or end
-                                 (and (char= #\- (peek 1))
+                                 (and (characterp (peek 1))
+                                      (char= #\- (peek 1))
                                       (consume)
-                                      (consume-unicode-range-element nil)))))))
+                                      (consume-unicode-range-element nil))
+                                 start)))))
