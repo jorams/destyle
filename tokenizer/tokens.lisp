@@ -42,7 +42,8 @@
 (deftoken
   (<string-token>
    <url-token>
-   <whitespace-token>)
+   <whitespace-token>
+   <comment-token>)
   (value string))
 
 (deftoken

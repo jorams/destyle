@@ -146,15 +146,18 @@
 (defun consume-comment ()
   (when (and (char= #\/ (peek 1))
              (char= #\* (peek 2)))
-    (consume 2)
-    (loop for index from 1
-          with expecting-/ = nil
-          do (case (peek index)
-               (#\* (setf expecting-/ t))
-               (#\/ (and expecting-/
-                         (consume index)
-                         (return t)))
-               (t (setf expecting-/ nil))))))
+    (make-instance '<comment-token>
+                   :value (consume-while
+                           (let ((expecting-/ nil)
+                                 (done nil))
+                             (lambda (char)
+                               (unless done
+                                 (prog1 t
+                                   (case char
+                                     (#\* (setf expecting-/ t))
+                                     (#\/ (and expecting-/
+                                               (setf done t)))
+                                     (t (setf expecting-/ nil)))))))))))
 
 (defun consume-delim ()
   (make-instance '<delim-token> :value (consume)))
