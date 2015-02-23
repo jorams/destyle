@@ -1,4 +1,4 @@
-(in-package :destyle.tokenizer)
+(in-package :destyle/tokenizer)
 
 (defparameter *token-triggers* ())
 
@@ -35,7 +35,7 @@
                       *token-triggers*)))
     (funcall (second fun))))
 
-(defun parse (input)
+(defun tokenize (input)
   (let ((*input* input)
         (*index* -1))
     (loop for char = (peek 1)

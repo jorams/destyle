@@ -1,4 +1,4 @@
-(in-package :destyle.tokenizer)
+(in-package :destyle/tokenizer)
 
 ;;; Basic machinery
 

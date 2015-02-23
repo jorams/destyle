@@ -15,6 +15,54 @@
 ;;;; - Some DEFINE-X-TRIGGERS macros for specifying triggers that are nearly
 ;;;;   the same.
 
-(defpackage :destyle.tokenizer
+(defpackage :destyle/tokenizer
   (:use :cl :alexandria)
-  (:import-from :bind :bind))
+  (:import-from :bind :bind)
+  (:export #:tokenize
+
+           ;; Token types
+           #:<ident-token>
+           #:<function-token>
+           #:<at-keyword-token>
+           #:<hash-token>
+           #:<string-token>
+           #:<url-token>
+           #:<whitespace-token>
+           #:<comment-token>
+           #:<bad-string-token>
+           #:<bad-url-token>
+           #:<delim-token>
+           #:<number-token>
+           #:<percentage-token>
+           #:<dimension-token>
+           #:<unicode-range-token>
+           #:<include-match-token>
+           #:<dash-match-token>
+           #:<prefix-match-token>
+           #:<suffix-match-token>
+           #:<substring-match-token>
+           #:<column-token>
+           #:<cdo-token>
+           #:<cdc-token>
+           #:<colon-token>
+           #:<semicolon-token>
+           #:<comma-token>
+           #:<[-token>
+           #:<]-token>
+           #:<\(-token>
+           #:<\)-token>
+           #:<{-token>
+           #:<}-token>
+
+           ;; Readers
+           #:value
+           #:hash-type
+           #:representation
+           #:number-type
+           #:unit
+           #:start
+           #:end
+
+           ;; Other types
+           #:hash-type
+           #:number-type))

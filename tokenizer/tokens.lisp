@@ -1,4 +1,4 @@
-(in-package :destyle.tokenizer)
+(in-package :destyle/tokenizer)
 
 (defclass token () ())
 
@@ -37,7 +37,7 @@
 
 (deftoken <hash-token>
   (value string)
-  (hash-type hash-token-type :unrestricted))
+  (hash-type hash-type :unrestricted))
 
 (deftoken
   (<string-token>
